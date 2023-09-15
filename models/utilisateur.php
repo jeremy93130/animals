@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/php_objet/models/database.php';
+require_once("./database.php");
 
 // Créer une classe utilisateur avec les proprietés:
 // Nom,prenom,email,mot de passe
@@ -22,12 +22,12 @@ class Utilisateur
     public function inscription()
     {
 
-        $dbConnexion = new DbConnect("localhost", "cours_db", "root", "");
         // Connecter à la base de données:
-        $db = $dbConnexion->dbConnect();
+        $db = new DbConnect("localhost", "pet_shop", "root", "");
+        $data = $db->connect();
 
         // Préparer la requête :
-        $request = $db->prepare('INSERT INTO utilisateurs (nom,email,mdp,prenom) VALUES (?,?,?,?)');
+        $request = $data->prepare('INSERT INTO utilisateur (nom,email,mdp,prenom) VALUES (?,?,?,?)');
         try {
             $request->execute(array($this->nom, $this->email, $this->mdp, $this->prenom));
         } catch (PDOException $error) {
@@ -38,11 +38,10 @@ class Utilisateur
 
     public static function connexion($email, $mdp)
     {
-        $dbConnexion = new DbConnect("localhost", "cours_db", "root", "");
-
-        $db = $dbConnexion->dbConnect();
+        $db = new DbConnect("localhost", "pet_shop", "root", "");
+        $data = $db->connect();
         // Préparer la requête :
-        $request = $db->prepare('SELECT * FROM utilisateurs WHERE email = ?');
+        $request = $data->prepare('SELECT * FROM utilisateur WHERE email = ?');
 
         try {
             $request->execute(array($email));

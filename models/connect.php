@@ -1,5 +1,4 @@
 <?php
-require_once("./database.php");
 require_once("../inc/fonction.php");
 require_once("./utilisateur.php");
 

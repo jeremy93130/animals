@@ -1,33 +1,28 @@
 <?php
-// Créer une classe pour se connecter à la base de donnée
-class DbConnect
-{
-    private $host;
-    private $dbName;
-    private $userName;
-    private $password;
 
-    // Constructeur de la classe 
-    public function __construct($hostDb, $dbNames, $userNameDb, $passwordDb)
-    {
-        $this->host = $hostDb;
-        $this->dbName = $dbNames;
-        $this->userName = $userNameDb;
-        $this->password = $passwordDb;
+require_once("../inc/fonction.php");
+// creer la classe DbConnect permettant de se connecter a la base de donnees
+class DbConnect {
+    private $host;
+    private $username;
+    private $password;
+    private $database;
+
+    public function __construct($host, $database, $username, $password) {
+        $this->host = $host;
+        $this->username = $username;
+        $this->password = $password;
+        $this->database = $database;
     }
 
-    public function dbConnect()
-    {
-        try { // Essaye de se connecter à la base de données
-
-            $connexionDB = new PDO("mysql:host=$this->host;dbname=$this->dbName", "$this->userName", "$this->password"); // On récupère l'objet de connexion à la base de données dans la variable $connexionDB
-
-        } catch (PDOException $error) { // Si la connexion echoue
-
-            $connexionDB = $error; // On récupère notre erreur dans $connexionDb
-
+    public function connect() {
+        $connexion = null;
+        try {
+            $connexion = new PDO("mysql:host={$this->host};dbname={$this->database}", $this->username, $this->password);
+            $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Erreur de connexion à la base de données : " . $e->getMessage());
         }
-        return $connexionDB; // Retourne l'objet PDO (avec ou sans erreur)
+        return $connexion;
     }
 }
-
